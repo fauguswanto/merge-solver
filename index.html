@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge Puzzle Solver (Excel Style)</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="main-container">
+    <div class="left-panel">
+        <div class="mode-selector">
+            <button class="mode-btn active" id="mode-editor" onclick="setMode('editor')">✏️ Mode Input (Ketik)</button>
+            <button class="mode-btn" id="mode-solve" onclick="setMode('solve')">🤖 Mode AI (Solver)</button>
+        </div>
+
+        <div class="grid-container" id="grid">
+            <!-- Grid cells akan di-generate oleh JavaScript -->
+        </div>
+
+        <button class="btn btn-clear" onclick="clearBoard()">🗑️ Clear Board (Hapus Semua)</button>
+    </div>
+
+    <div class="right-panel">
+        <h3>Move Advisor</h3>
+        
+        <button class="btn btn-solve" onclick="findBestMove()">Cari Langkah Terbaik!</button>
+        
+        <div class="rec-box" id="recommendation">
+            <h4>Menunggu Analisis...</h4>
+            <p>Isi papan terlebih dahulu, lalu klik tombol di atas.</p>
+        </div>
+        
+        <div class="instructions" id="input-instructions">
+            <b>Cara Input Cepat (Seperti Excel):</b><br>
+            • Klik kotak, lalu ketik <kbd>1</kbd> - <kbd>9</kbd> (Ketik <kbd>0</kbd> untuk Level 10).<br>
+            • Tekan <kbd>Backspace</kbd> atau <kbd>X</kbd> untuk mengosongkan kotak.<br>
+            • Kursor otomatis maju ke kanan. Jika sudah di ujung (misal A5), kursor akan turun ke baris berikutnya (B1).
+        </div>
+
+        <div class="status-bar" id="status-text">
+            Klik kotak di grid, lalu mulai ketik angka.
+        </div>
+        
+        <div style="margin-top: auto; font-size: 0.8rem; color: #888;">
+            <p><b>Aturan AI:</b><br>
+            1. Mencoba <b>Upgrade (+1)</b>.<br>
+            2. Mencoba <b>Discard (Buang)</b> & menjatuhkan tile di atasnya.<br>
+            3. <i>(Tile baru yang muncul di atas tidak ditebak/diasumsikan oleh AI)</i>.</p>
+        </div>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
