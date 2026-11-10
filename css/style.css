@@ -208,3 +208,17 @@ body {
         font-size: 1.2rem; /* Sedikit lebih kecil di HP */
     }
 }
+
+#version-indicator {
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 100;
+    font-family: monospace;
+}

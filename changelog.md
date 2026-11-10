@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.6.0] - 2026-11-10
+### Added
+- Menambahkan indikator versi di pojok kanan bawah website untuk memudahkan verifikasi pembaruan GitHub Pages.
+
+
 ## [1.5.0] - 2026-11-10
 ### Added
 - **Mobile Responsive**: Layout sekarang otomatis menyesuaikan ukuran layar HP (atas-bawah).
