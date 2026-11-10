@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.6.6] - 2026-11-10
+### Fixed
+- **Ultimate Mobile Fix**: Menerapkan *Debounce Time* 150ms pada fungsi `processInput`. Jika ada *event* ganda (keydown + input) dari virtual keyboard untuk karakter yang sama, sistem akan mengabaikan *event* kedua.
+- Menghapus *event listener* `keydown` pada kotak input tersembunyi yang sebelumnya menjadi sumber konflik.
+
+
 ## [v1.6.5] - 2026-11-10
 ### Fixed
 - **Critical Mobile Fix**: Mengatasi bug *double input* (menekan 1 tombol menghasilkan 2 angka) dengan menambahkan sistem *lock/debounce* 50ms pada fungsi `processInput`.

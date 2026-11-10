@@ -10,6 +10,8 @@ let selCol = 0;
 
 let lastKey = '';
 let lastKeyTime = 0;
+let lastProcessedKey = '';
+let lastProcessedTime = 0;
 
 function initBoard() {
     board = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(0));
@@ -126,15 +128,21 @@ function advanceCursor() {
 let isProcessingInput = false;
 
 function processInput(key) {
-    // Mencegah double event (keydown + input) dari virtual keyboard mobile
-    if (isProcessingInput) return;
-    isProcessingInput = true;
+    const now = Date.now();
+
+    // [FIX MUTLAK] Jika tombol yang sama ditekan dalam waktu < 150ms, abaikan.
+    // Ini mencegah bug 1 ketukan di HP yang memicu event keydown + input sekaligus.
+    if (key === lastProcessedKey && (now - lastProcessedTime) < 150) {
+        return; 
+    }
+    lastProcessedKey = key;
+    lastProcessedTime = now;
+
     if (key === 'Backspace' || key === 'Delete' || key.toLowerCase() === 'x') {
         board[selRow][selCol] = 0;
         lastKey = '';
     } 
     else if (key >= '1' && key <= '9') {
-        const now = Date.now();
         if (lastKey === '1' && key === '0' && (now - lastKeyTime) < 300) {
             board[selRow][selCol] = 10;
             lastKey = ''; 
@@ -152,7 +160,6 @@ function processInput(key) {
         advanceCursor(); 
     }
     renderGrid();
-    setTimeout(() => { isProcessingInput = false; }, 50);
 }
 
 const mobileInput = document.getElementById('mobile-input');
@@ -194,7 +201,7 @@ document.addEventListener('keydown', (e) => {
     
     // KUNCI PERBAIKAN: Jika event berasal dari mobile-input, ABAIKAN!
     // Karena sudah ditangani oleh listener di atas.
-    if (e.target.id === 'mobile-input') return;
+    if (document.activeElement === document.getElementById('mobile-input')) return;
 
     if (e.key === 'ArrowRight') { selCol = Math.min(selCol + 1, 4); e.preventDefault(); renderGrid(); }
     else if (e.key === 'ArrowLeft') { selCol = Math.max(selCol - 1, 0); e.preventDefault(); renderGrid(); }
