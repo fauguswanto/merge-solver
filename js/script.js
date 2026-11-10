@@ -3,7 +3,7 @@ const BOARD_SIZE = 5;
 const ROWS = ['A', 'B', 'C', 'D', 'E'];
 let board = []; 
 let currentMode = 'editor'; 
-let activeRecommendation = null; // Menyimpan saran AI saat ini
+let activeRecommendation = null; 
 
 let selRow = 0;
 let selCol = 0;
@@ -33,7 +33,6 @@ function renderGrid() {
                 cell.classList.add('selected');
             }
 
-            // Highlight rekomendasi AI
             if (activeRecommendation && activeRecommendation.from.r === r && activeRecommendation.from.c === c) {
                 cell.classList.add('recommend-action');
             }
@@ -70,10 +69,7 @@ function setMode(mode) {
 }
 
 function handleCellClick(r, c) {
-    // CEK: Apakah yang diklik adalah kotak rekomendasi AI?
     if (activeRecommendation && activeRecommendation.from.r === r && activeRecommendation.from.c === c) {
-        
-        // Eksekusi Saran
         if (activeRecommendation.type === 'upgrade') {
             board[r][c] += 1;
         } else if (activeRecommendation.type === 'discard') {
@@ -81,14 +77,9 @@ function handleCellClick(r, c) {
             applyGravity(board);
         }
 
-        // Selesaikan merge yang mungkin terpicu
-        let mergeResult = resolveMerges(board);
-        
-        // Bersihkan state rekomendasi
+        resolveMerges(board);
         activeRecommendation = null;
         clearHighlights();
-        
-        // Kembali ke mode editor agar user bisa input tile baru (jika ada)
         setMode('editor');
         
         const recBox = document.getElementById('recommendation');
@@ -99,10 +90,15 @@ function handleCellClick(r, c) {
         return;
     }
 
-    // Jika bukan klik pada rekomendasi, jalankan mode editor normal
     if (currentMode === 'editor') {
         selRow = r;
         selCol = c;
+        
+        // FOKUSKAN INPUT TERSEMBUNYI UNTUK MEMUNCULKAN KEYBOARD DI MOBILE
+        const mobileInput = document.getElementById('mobile-input');
+        mobileInput.focus();
+        mobileInput.value = ''; // Reset value
+        
         renderGrid(); 
     }
 }
@@ -118,38 +114,60 @@ function advanceCursor() {
     }
 }
 
-document.addEventListener('keydown', (e) => {
-    if (currentMode !== 'editor') return;
-
-    if (e.key === 'ArrowRight') { selCol = Math.min(selCol + 1, 4); e.preventDefault(); }
-    else if (e.key === 'ArrowLeft') { selCol = Math.max(selCol - 1, 0); e.preventDefault(); }
-    else if (e.key === 'ArrowDown' || e.key === 'Enter') { selRow = Math.min(selRow + 1, 4); e.preventDefault(); }
-    else if (e.key === 'ArrowUp') { selRow = Math.max(selRow - 1, 0); e.preventDefault(); }
-    
-    else if (e.key >= '1' && e.key <= '9') {
+// Fungsi bantuan untuk memproses input (digunakan desktop & mobile)
+function processInput(key) {
+    if (key === 'Backspace' || key === 'Delete' || key.toLowerCase() === 'x') {
+        board[selRow][selCol] = 0;
+        lastKey = '';
+    } 
+    else if (key >= '1' && key <= '9') {
         const now = Date.now();
-        if (lastKey === '1' && e.key === '0' && (now - lastKeyTime) < 300) {
+        if (lastKey === '1' && key === '0' && (now - lastKeyTime) < 300) {
             board[selRow][selCol] = 10;
             lastKey = ''; 
             advanceCursor(); 
         } else {
-            board[selRow][selCol] = parseInt(e.key);
-            lastKey = e.key;
+            board[selRow][selCol] = parseInt(key);
+            lastKey = key;
             lastKeyTime = now;
             advanceCursor(); 
         }
     }
-    else if (e.key === '0') {
+    else if (key === '0') {
         board[selRow][selCol] = 10;
         lastKey = '';
         advanceCursor(); 
     }
-    else if (e.key === 'Backspace' || e.key === 'Delete' || e.key.toLowerCase() === 'x') {
-        board[selRow][selCol] = 0;
-        lastKey = '';
-    }
-
     renderGrid();
+}
+
+// 1. Event Listener untuk DESKTOP (Keyboard Fisik)
+document.addEventListener('keydown', (e) => {
+    if (currentMode !== 'editor') return;
+
+    // Navigasi Panah
+    if (e.key === 'ArrowRight') { selCol = Math.min(selCol + 1, 4); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowLeft') { selCol = Math.max(selCol - 1, 0); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowDown' || e.key === 'Enter') { selRow = Math.min(selRow + 1, 4); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowUp') { selRow = Math.max(selRow - 1, 0); e.preventDefault(); renderGrid(); }
+    else {
+        processInput(e.key);
+    }
+});
+
+// 2. Event Listener untuk MOBILE (Keyboard Virtual)
+document.getElementById('mobile-input').addEventListener('input', function(e) {
+    if (currentMode !== 'editor') return;
+    
+    let val = this.value;
+    if (val.length > 0) {
+        // Ambil karakter terakhir yang diketik
+        let char = val[val.length - 1]; 
+        processInput(char);
+        
+        // Kosongkan kembali input agar bisa menerima ketikan berikutnya
+        this.value = ''; 
+    }
 });
 
 function clearBoard() {
@@ -261,7 +279,6 @@ function findBestMove() {
     let bestScore = -Infinity;
     let bestMove = null;
 
-    // 1. Simulasi UPGRADE
     for (let r = 0; r < BOARD_SIZE; r++) {
         for (let c = 0; c < BOARD_SIZE; c++) {
             if (board[r][c] > 0 && board[r][c] < 10) {
@@ -282,7 +299,6 @@ function findBestMove() {
         }
     }
 
-    // 2. Simulasi DISCARD
     for (let r = 0; r < BOARD_SIZE; r++) {
         for (let c = 0; c < BOARD_SIZE; c++) {
             if (board[r][c] > 0) {
@@ -308,7 +324,6 @@ function findBestMove() {
         }
     }
 
-    // Tampilkan Hasil
     const recBox = document.getElementById('recommendation');
     clearHighlights();
 
@@ -318,9 +333,8 @@ function findBestMove() {
         return;
     }
 
-    // Simpan rekomendasi ke state global agar bisa diklik
     activeRecommendation = bestMove;
-    renderGrid(); // Render ulang untuk memunculkan highlight kuning
+    renderGrid(); 
 
     const coord = `${ROWS[bestMove.from.r]}${bestMove.from.c + 1}`;
     let textAction = "";

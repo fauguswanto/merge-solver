@@ -174,3 +174,37 @@ body {
     cursor: pointer; border-radius: 5px;
 }
 .mode-btn.active { background-color: #3498db; }
+
+/* ========================================= */
+/* MEDIA QUERIES UNTUK MOBILE RESPONSIVE     */
+/* ========================================= */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    .main-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .left-panel {
+        flex: none;
+        width: 100%;
+    }
+    
+    .right-panel {
+        flex: none;
+        width: 100%;
+    }
+
+    .grid-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .cell {
+        font-size: 1.2rem; /* Sedikit lebih kecil di HP */
+    }
+}

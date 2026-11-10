@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0] - 2026-11-10
+### Added
+- **Mobile Responsive**: Layout sekarang otomatis menyesuaikan ukuran layar HP (atas-bawah).
+- **Mobile Keyboard Support**: Menambahkan elemen input tersembunyi agar keyboard virtual muncul saat kotak diklik di HP.
+
+
+## [1.5.0] - 2026-11-10
+### Added
+- **Mobile Responsive**: Layout sekarang otomatis menyesuaikan ukuran layar HP (atas-bawah).
+- **Mobile Keyboard Support**: Menambahkan elemen input tersembunyi agar keyboard virtual muncul saat kotak diklik di HP.
+
+
 ## [1.4.0] - 2026-11-10
 ### Added
 - Fitur eksekusi interaktif: Pengguna dapat mengklik kotak yang direkomendasikan AI untuk langsung menerapkan simulasi (Upgrade atau Discard).
