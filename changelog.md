@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.8.0] - 2026-11-10
+### Added
+- **Fitur Undo**: Tombol untuk membatalkan langkah saran AI dan mengembalikan papan ke kondisi sebelumnya.
+- **Animasi Simulasi**: Proses *merge* dan gravitasi kini berjalan perlahan (bertahap) dengan efek *highlight* putih, sehingga pengguna dapat melihat secara visual apa yang terjadi pada tile.
+
+
 ## [v1.7.0] - 2026-11-10
 ### Added
 - **Fitur Mode Copas (Paste Mode)**: Pengguna dapat menempelkan (*paste*) deretan 25 angka (dipisahkan spasi/enter/koma) untuk langsung mengisi seluruh papan secara instan.

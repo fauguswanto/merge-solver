@@ -3,7 +3,8 @@ const BOARD_SIZE = 5;
 const ROWS = ['A', 'B', 'C', 'D', 'E'];
 let board = []; 
 let currentMode = 'editor'; 
-let activeRecommendation = null; 
+let activeRecommendation = null;
+let previousBoardState = null; 
 
 let selRow = 0;
 let selCol = 0;
@@ -73,6 +74,11 @@ function setMode(mode) {
 function handleCellClick(r, c) {
     // Cek rekomendasi AI
     if (activeRecommendation && activeRecommendation.from.r === r && activeRecommendation.from.c === c) {
+        // 1. Simpan state untuk Undo
+        previousBoardState = copyBoard(board);
+        document.getElementById('undo-btn').style.display = 'block';
+
+        // 2. Jalankan aksi dasar (Upgrade atau Discard)
         if (activeRecommendation.type === 'upgrade') {
             board[r][c] += 1;
         } else if (activeRecommendation.type === 'discard') {
@@ -80,16 +86,22 @@ function handleCellClick(r, c) {
             applyGravity(board);
         }
 
-        resolveMerges(board);
         activeRecommendation = null;
         clearHighlights();
         setMode('editor');
+        renderGrid();
         
         const recBox = document.getElementById('recommendation');
-        recBox.innerHTML = `<h4>Saran Diterapkan!</h4><p>Langkah telah disimulasikan. Silakan input tile baru yang muncul di game asli Anda.</p>`;
-        document.getElementById('status-text').textContent = "Saran diterapkan. Silakan input tile baru.";
-        
-        renderGrid();
+        recBox.innerHTML = `<h4>Memproses Merge...</h4><p>Sistem sedang mensimulasikan gravitasi dan penggabungan.</p>`;
+        document.getElementById('status-text').textContent = "Simulasi berjalan...";
+
+        // 3. Jalankan animasi bertahap
+        setTimeout(async () => {
+            await animateResolution(board);
+            recBox.innerHTML = `<h4>Saran Diterapkan!</h4><p>Langkah telah disimulasikan sepenuhnya. Silakan input tile baru yang muncul di game asli Anda.</p>`;
+            document.getElementById('status-text').textContent = "Simulasi selesai. Silakan input tile baru.";
+        }, 300); // Delay sedikit sebelum animasi mulai
+
         return;
     }
 
@@ -212,9 +224,63 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+async function animateResolution(b) {
+    while (true) {
+        const clusters = findClusters(b);
+        if (clusters.length === 0) break;
+
+        // Highlight kelompok yang akan di-merge
+        clusters.forEach(cluster => {
+            cluster.cells.forEach(cell => {
+                const el = document.querySelector(`.cell[data-row="${cell.r}"][data-col="${cell.c}"]`);
+                if (el) el.classList.add('animating-merge');
+            });
+        });
+        
+        await sleep(600); // Jeda agar mata bisa melihat highlight
+
+        // Lakukan Merge
+        clusters.forEach(cluster => {
+            b[cluster.cells[0].r][cluster.cells[0].c] = cluster.level + 1;
+            for (let i = 1; i < cluster.cells.length; i++) {
+                b[cluster.cells[i].r][cluster.cells[i].c] = 0;
+            }
+        });
+        
+        // Hapus class highlight dan render
+        document.querySelectorAll('.cell').forEach(c => c.classList.remove('animating-merge'));
+        renderGrid();
+        
+        await sleep(400); // Jeda sebelum jatuh
+
+        // Lakukan Gravitasi
+        applyGravity(b);
+        renderGrid();
+        await sleep(400);
+    }
+}
+
+function undoAction() {
+    if (previousBoardState) {
+        board = copyBoard(previousBoardState);
+        previousBoardState = null;
+        document.getElementById('undo-btn').style.display = 'none';
+        renderGrid();
+        document.getElementById('status-text').textContent = "Papan dikembalikan ke kondisi sebelumnya.";
+        document.getElementById('recommendation').innerHTML = "<h4>Analisis Dibatalkan.</h4><p>Silakan cari langkah terbaik lagi jika diperlukan.</p>";
+        activeRecommendation = null;
+        clearHighlights();
+    }
+}
+
 function clearBoard() {
     selRow = 0; selCol = 0; lastKey = ''; 
     activeRecommendation = null;
+    previousBoardState = null;
+    document.getElementById('undo-btn').style.display = 'none';
     initBoard(); 
     document.getElementById('status-text').textContent = "Papan berhasil dibersihkan.";
     document.getElementById('recommendation').innerHTML = "<h4>Menunggu Analisis...</h4><p>Isi papan terlebih dahulu, lalu klik tombol di atas.</p>";

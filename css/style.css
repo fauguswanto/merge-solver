@@ -267,3 +267,21 @@ body {
 .btn-paste:hover {
     background-color: #e67e22;
 }
+
+/* Tombol Undo */
+.btn-undo {
+    background-color: #f39c12;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: 2px solid #e67e22;
+}
+.btn-undo:hover { background-color: #e67e22; }
+
+/* Animasi Highlight saat Merge */
+.cell.animating-merge {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #fff inset, 0 0 10px #fff !important;
+    transition: all 0.3s ease;
+    z-index: 20;
+}
