@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.6.3] - 2026-11-10
+### Fixed
+- Memperbaiki bug "Double Input" di mana satu ketikan di HP mengisi dua kotak sekaligus (A1 dan B1).
+- Memisahkan event listener untuk mencegah tumpang tindih antara event `keydown` dan `input`.
+
+
 ## [v1.6.2] - 2026-11-10
 ### Changed
 - Memindahkan posisi indikator versi dari pojok kanan bawah (melayang) ke bawah tombol "Clear Board" agar lebih terlihat jelas dan rapi.

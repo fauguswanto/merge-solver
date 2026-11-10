@@ -149,28 +149,53 @@ function processInput(key) {
     renderGrid();
 }
 
-// 1. Event Listener untuk DESKTOP (Keyboard Fisik)
-document.addEventListener('keydown', (e) => {
-    if (currentMode !== 'editor') return;
+const mobileInput = document.getElementById('mobile-input');
 
-    if (e.key === 'ArrowRight') { selCol = Math.min(selCol + 1, 4); e.preventDefault(); renderGrid(); }
-    else if (e.key === 'ArrowLeft') { selCol = Math.max(selCol - 1, 0); e.preventDefault(); renderGrid(); }
-    else if (e.key === 'ArrowDown' || e.key === 'Enter') { selRow = Math.min(selRow + 1, 4); e.preventDefault(); renderGrid(); }
-    else if (e.key === 'ArrowUp') { selRow = Math.max(selRow - 1, 0); e.preventDefault(); renderGrid(); }
-    else {
-        processInput(e.key);
-    }
-});
-
-// 2. Event Listener untuk MOBILE (Keyboard Virtual)
-document.getElementById('mobile-input').addEventListener('input', function(e) {
+// 1. Event Listener KHUSUS INPUT TERSEMBUNYI (Menangani Ketikan Angka)
+mobileInput.addEventListener('input', function(e) {
     if (currentMode !== 'editor') return;
     
     let val = this.value;
     if (val.length > 0) {
         let char = val[val.length - 1]; 
         processInput(char);
-        this.value = ''; 
+        this.value = ''; // Langsung kosongkan setelah diproses
+    }
+});
+
+// 2. Event Listener KHUSUS INPUT TERSEMBUNYI (Navigasi & Hapus saat fokus)
+mobileInput.addEventListener('keydown', function(e) {
+    if (currentMode !== 'editor') return;
+
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+        if (this.value === '') {
+            processInput('Backspace');
+            e.preventDefault(); // Mencegah browser kembali ke halaman sebelumnya
+        }
+    } else if (e.key === 'ArrowRight') { selCol = Math.min(selCol + 1, 4); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowLeft') { selCol = Math.max(selCol - 1, 0); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowDown' || e.key === 'Enter') { selRow = Math.min(selRow + 1, 4); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowUp') { selRow = Math.max(selRow - 1, 0); e.preventDefault(); renderGrid(); }
+    else if (e.key.toLowerCase() === 'x') {
+        processInput('x');
+        e.preventDefault();
+    }
+});
+
+// 3. Event Listener GLOBAL (Hanya sebagai Fallback jika input tidak fokus)
+document.addEventListener('keydown', (e) => {
+    if (currentMode !== 'editor') return;
+    
+    // KUNCI PERBAIKAN: Jika event berasal dari mobile-input, ABAIKAN!
+    // Karena sudah ditangani oleh listener di atas.
+    if (e.target.id === 'mobile-input') return;
+
+    if (e.key === 'ArrowRight') { selCol = Math.min(selCol + 1, 4); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowLeft') { selCol = Math.max(selCol - 1, 0); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowDown' || e.key === 'Enter') { selRow = Math.min(selRow + 1, 4); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'ArrowUp') { selRow = Math.max(selRow - 1, 0); e.preventDefault(); renderGrid(); }
+    else if (e.key === 'Backspace' || e.key === 'Delete' || e.key.toLowerCase() === 'x' || (e.key >= '0' && e.key <= '9')) {
+        processInput(e.key);
     }
 });
 
