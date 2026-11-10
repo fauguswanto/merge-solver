@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.6.2] - 2026-11-10
+### Changed
+- Memindahkan posisi indikator versi dari pojok kanan bawah (melayang) ke bawah tombol "Clear Board" agar lebih terlihat jelas dan rapi.
+
+
 ## [v1.6.1] - 2026-11-10
 ### Fixed
 - Memperbaiki masalah keyboard mobile yang tidak muncul dengan mengubah styling input tersembunyi (ukuran 1x1px, font 16px).
