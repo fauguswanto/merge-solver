@@ -10,7 +10,7 @@
 <body>
 
 <!-- INPUT TERSEMBUNYI (Ukuran 1x1 px, font 16px agar iOS tidak auto-zoom) -->
-<input type="text" id="mobile-input" inputmode="numeric" pattern="[0-9]*" style="position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0.01; font-size: 16px; z-index: -1; border: none; outline: none;">
+<input type="text" id="mobile-input" inputmode="numeric" autocomplete="off" autocorrect="off" spellcheck="false" pattern="[0-9]*" style="position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0.01; font-size: 16px; z-index: -1; border: none; outline: none;">
 
 <div class="main-container">
     <div class="left-panel">
@@ -24,7 +24,7 @@
         </div>
 
         <button class="btn btn-clear" onclick="clearBoard()">🗑️ Clear Board (Hapus Semua)</button>
-        <div id="version-indicator">v1.6.3</div>
+        <div id="version-indicator">v1.6.5</div>
     </div>
 
     <div class="right-panel">

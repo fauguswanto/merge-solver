@@ -123,7 +123,12 @@ function advanceCursor() {
 }
 
 // Fungsi bantuan untuk memproses input
+let isProcessingInput = false;
+
 function processInput(key) {
+    // Mencegah double event (keydown + input) dari virtual keyboard mobile
+    if (isProcessingInput) return;
+    isProcessingInput = true;
     if (key === 'Backspace' || key === 'Delete' || key.toLowerCase() === 'x') {
         board[selRow][selCol] = 0;
         lastKey = '';
@@ -147,6 +152,7 @@ function processInput(key) {
         advanceCursor(); 
     }
     renderGrid();
+    setTimeout(() => { isProcessingInput = false; }, 50);
 }
 
 const mobileInput = document.getElementById('mobile-input');
@@ -300,9 +306,9 @@ function copyBoard(b) {
 }
 
 function findBestMove() {
+    // Otomatis pindah ke Mode AI jika user belum di mode tersebut
     if (currentMode !== 'solve') {
-        alert("Pindah ke Mode AI terlebih dahulu!");
-        return;
+        setMode('solve');
     }
 
     let bestScore = -Infinity;

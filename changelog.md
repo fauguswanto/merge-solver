@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.6.5] - 2026-11-10
+### Fixed
+- **Critical Mobile Fix**: Mengatasi bug *double input* (menekan 1 tombol menghasilkan 2 angka) dengan menambahkan sistem *lock/debounce* 50ms pada fungsi `processInput`.
+- Menambahkan atribut `autocomplete="off"` pada input tersembunyi untuk mencegah intervensi browser mobile.
+
+
+## [v1.6.4] - 2026-11-10
+### Changed
+- **UX Improvement**: Menghapus alert "Pindah ke Mode AI terlebih dahulu". 
+- Tombol "Cari Langkah Terbaik" sekarang otomatis memindahkan aplikasi ke Mode AI dan langsung menjalankan analisis solver tanpa perlu interaksi manual tambahan.
+
+
 ## [v1.6.3] - 2026-11-10
 ### Fixed
 - Memperbaiki bug "Double Input" di mana satu ketikan di HP mengisi dua kotak sekaligus (A1 dan B1).
