@@ -407,4 +407,42 @@ function findBestMove() {
     `;
 }
 
+
+function importFromText() {
+    const text = document.getElementById('paste-input').value;
+    
+    // Ambil semua angka (termasuk 10) dari teks
+    const numbers = text.match(/\d+/g);
+    
+    if (!numbers) {
+        alert("Tidak ada angka yang ditemukan di dalam teks.");
+        return;
+    }
+
+    if (numbers.length !== 25) {
+        alert(`Jumlah angka harus tepat 25. Anda memasukkan ${numbers.length} angka.`);
+        return;
+    }
+
+    let index = 0;
+    for (let r = 0; r < BOARD_SIZE; r++) {
+        for (let c = 0; c < BOARD_SIZE; c++) {
+            let val = parseInt(numbers[index]);
+            // Ubah 0 menjadi 10 (sesuai aturan input kita)
+            if (val === 0) val = 10;
+            
+            // Batasi level maksimal 10
+            if (val > 10) val = 10;
+            
+            board[r][c] = val;
+            index++;
+        }
+    }
+    
+    renderGrid();
+    document.getElementById('status-text').textContent = "Berhasil mengimpor 25 angka dari teks!";
+    document.getElementById('paste-input').value = ''; // Kosongkan textarea
+}
+
+// Mulai Game
 initBoard();

@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.7.0] - 2026-11-10
+### Added
+- **Fitur Mode Copas (Paste Mode)**: Pengguna dapat menempelkan (*paste*) deretan 25 angka (dipisahkan spasi/enter/koma) untuk langsung mengisi seluruh papan secara instan.
+
+
 ## [v1.6.6] - 2026-11-10
 ### Fixed
 - **Ultimate Mobile Fix**: Menerapkan *Debounce Time* 150ms pada fungsi `processInput`. Jika ada *event* ganda (keydown + input) dari virtual keyboard untuk karakter yang sama, sistem akan mengabaikan *event* kedua.
