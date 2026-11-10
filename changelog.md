@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.6.1] - 2026-11-10
+### Fixed
+- Memperbaiki masalah keyboard mobile yang tidak muncul dengan mengubah styling input tersembunyi (ukuran 1x1px, font 16px).
+- Memperbaiki masalah zoom-out/layout melebar di mobile dengan menambahkan `box-sizing: border-box` dan `overflow-x: hidden`.
+
+
 ## [v1.6.0] - 2026-11-10
 ### Added
 - Menambahkan indikator versi di pojok kanan bawah website untuk memudahkan verifikasi pembaruan GitHub Pages.

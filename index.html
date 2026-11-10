@@ -2,14 +2,15 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Hapus maximum-scale agar auto-zoom-out berfungsi normal -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merge Puzzle Solver (Excel Style)</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- INPUT TERSEMBUNYI UNTUK MEMUNCULKAN KEYBOARD DI MOBILE -->
-<input type="text" id="mobile-input" inputmode="numeric" pattern="[0-9]*" style="position: absolute; opacity: 0; pointer-events: none; z-index: -1;">
+<!-- INPUT TERSEMBUNYI (Ukuran 1x1 px, font 16px agar iOS tidak auto-zoom) -->
+<input type="text" id="mobile-input" inputmode="numeric" pattern="[0-9]*" style="position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0.01; font-size: 16px; z-index: -1; border: none; outline: none;">
 
 <div class="main-container">
     <div class="left-panel">
@@ -55,7 +56,8 @@
     </div>
 </div>
 
+<div id="version-indicator">v1.6.1</div>
+
 <script src="js/script.js"></script>
-<div id="version-indicator">v1.6.0</div>
 </body>
 </html>

@@ -1,3 +1,15 @@
+/* Reset dasar agar padding tidak membuat layar melebar */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden; /* Mencegah layar geser ke samping */
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 :root {
     --bg-color: #1e1e24;
     --panel-bg: #2a2a35;
@@ -10,7 +22,6 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    margin: 0;
     padding: 20px;
     display: flex;
     justify-content: center;
@@ -51,6 +62,7 @@ body {
     border-radius: 8px;
     aspect-ratio: 1 / 1;
     position: relative;
+    width: 100%;
 }
 
 .cell {
@@ -175,18 +187,33 @@ body {
 }
 .mode-btn.active { background-color: #3498db; }
 
+#version-indicator {
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 100;
+    font-family: monospace;
+}
+
 /* ========================================= */
 /* MEDIA QUERIES UNTUK MOBILE RESPONSIVE     */
 /* ========================================= */
 @media (max-width: 768px) {
     body {
         flex-direction: column;
-        padding: 10px;
+        padding: 10px; /* Padding lebih kecil di HP */
     }
     
     .main-container {
         flex-direction: column;
         gap: 15px;
+        width: 100%;
     }
     
     .left-panel {
@@ -205,20 +232,6 @@ body {
     }
 
     .cell {
-        font-size: 1.2rem; /* Sedikit lebih kecil di HP */
+        font-size: 1.2rem;
     }
-}
-
-#version-indicator {
-    position: fixed;
-    bottom: 10px;
-    right: 15px;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.5);
-    background: rgba(0, 0, 0, 0.6);
-    padding: 4px 8px;
-    border-radius: 4px;
-    pointer-events: none;
-    z-index: 100;
-    font-family: monospace;
 }

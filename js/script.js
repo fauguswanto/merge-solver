@@ -69,6 +69,7 @@ function setMode(mode) {
 }
 
 function handleCellClick(r, c) {
+    // Cek rekomendasi AI
     if (activeRecommendation && activeRecommendation.from.r === r && activeRecommendation.from.c === c) {
         if (activeRecommendation.type === 'upgrade') {
             board[r][c] += 1;
@@ -90,14 +91,21 @@ function handleCellClick(r, c) {
         return;
     }
 
+    // Mode Editor Biasa
     if (currentMode === 'editor') {
         selRow = r;
         selCol = c;
         
-        // FOKUSKAN INPUT TERSEMBUNYI UNTUK MEMUNCULKAN KEYBOARD DI MOBILE
+        // PENTING UNTUK MOBILE: Fokuskan input tersembunyi
         const mobileInput = document.getElementById('mobile-input');
+        mobileInput.value = ''; // Reset value agar bisa menerima input baru
+        
+        // Trik Paksa Buka Keyboard di Mobile
         mobileInput.focus();
-        mobileInput.value = ''; // Reset value
+        // Timeout kecil membantu browser mobile menyadari ada event klik
+        setTimeout(() => {
+            mobileInput.focus();
+        }, 50);
         
         renderGrid(); 
     }
@@ -114,7 +122,7 @@ function advanceCursor() {
     }
 }
 
-// Fungsi bantuan untuk memproses input (digunakan desktop & mobile)
+// Fungsi bantuan untuk memproses input
 function processInput(key) {
     if (key === 'Backspace' || key === 'Delete' || key.toLowerCase() === 'x') {
         board[selRow][selCol] = 0;
@@ -145,7 +153,6 @@ function processInput(key) {
 document.addEventListener('keydown', (e) => {
     if (currentMode !== 'editor') return;
 
-    // Navigasi Panah
     if (e.key === 'ArrowRight') { selCol = Math.min(selCol + 1, 4); e.preventDefault(); renderGrid(); }
     else if (e.key === 'ArrowLeft') { selCol = Math.max(selCol - 1, 0); e.preventDefault(); renderGrid(); }
     else if (e.key === 'ArrowDown' || e.key === 'Enter') { selRow = Math.min(selRow + 1, 4); e.preventDefault(); renderGrid(); }
@@ -161,11 +168,8 @@ document.getElementById('mobile-input').addEventListener('input', function(e) {
     
     let val = this.value;
     if (val.length > 0) {
-        // Ambil karakter terakhir yang diketik
         let char = val[val.length - 1]; 
         processInput(char);
-        
-        // Kosongkan kembali input agar bisa menerima ketikan berikutnya
         this.value = ''; 
     }
 });
